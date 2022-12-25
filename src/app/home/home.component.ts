@@ -5,21 +5,20 @@ import {catchError, delayWhen, map, retryWhen, shareReplay, tap} from 'rxjs/oper
 
 
 @Component({
-    selector: 'home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css']
+  selector: 'home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
 
 
-    constructor() {
+  constructor() {
 
-    }
+  }
 
-    ngOnInit() {
+  ngOnInit() {
 
 
-
-    }
+  }
 
 }
