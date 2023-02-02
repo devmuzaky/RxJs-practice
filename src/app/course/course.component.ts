@@ -1,10 +1,11 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {distinctUntilChanged, map, startWith, switchMap, tap, throttleTime} from 'rxjs/operators';
-import {fromEvent, interval, Observable} from 'rxjs';
+import {distinctUntilChanged, map, startWith, switchMap, throttleTime} from 'rxjs/operators';
+import {fromEvent, Observable} from 'rxjs';
 import {createHttpObservable} from "../common/util";
 import {Course} from "../model/course";
 import {Lesson} from "../model/lesson";
+import {debug, RxJsLoggingLevel, setRxJsLoggingLevel} from "../common/debug";
 
 
 @Component({
@@ -26,7 +27,12 @@ export class CourseComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     this.courseId = this.route.snapshot.params['id'];
-    this.course$ = createHttpObservable(`/api/courses/${this.courseId}`);
+    this.course$ = createHttpObservable(`/api/courses/${this.courseId}`)
+      .pipe(
+        debug(RxJsLoggingLevel.INFO, 'course value'),
+      );
+
+    setRxJsLoggingLevel(RxJsLoggingLevel.DEBUG);
   }
 
   ngAfterViewInit() {
@@ -34,9 +40,11 @@ export class CourseComponent implements OnInit, AfterViewInit {
       .pipe(
         map(event => event.target.value),
         startWith(''),
+        debug(RxJsLoggingLevel.TRACE, 'search'),
         throttleTime(500),
         distinctUntilChanged(),
-        switchMap(search => this.loadLessons(search))
+        switchMap(search => this.loadLessons(search)),
+        debug(RxJsLoggingLevel.DEBUG, 'lessons value'),
       );
 
   }
