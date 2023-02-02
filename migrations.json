@@ -1,0 +1,12 @@
+{
+  "migrations": [
+    {
+      "cli": "nx",
+      "version": "15.5.0-beta.0",
+      "description": "Update the @angular/cli package version to ~15.1.0.",
+      "factory": "./src/migrations/update-15-5-0/update-angular-cli",
+      "package": "@nrwl/angular",
+      "name": "update-angular-cli-version-15-1-0"
+    }
+  ]
+}
