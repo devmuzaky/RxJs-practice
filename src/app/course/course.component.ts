@@ -6,6 +6,7 @@ import {createHttpObservable} from "../common/util";
 import {Course} from "../model/course";
 import {Lesson} from "../model/lesson";
 import {debug, RxJsLoggingLevel, setRxJsLoggingLevel} from "../common/debug";
+import {StoreService} from "../common/store.service";
 
 
 @Component({
@@ -15,32 +16,33 @@ import {debug, RxJsLoggingLevel, setRxJsLoggingLevel} from "../common/debug";
 })
 export class CourseComponent implements OnInit, AfterViewInit {
 
-  courseId: string;
+  courseId: number;
   course$: Observable<Course>;
-  lessons$: Observable<Lesson[]> | any;
+  lessons$: Observable<Lesson[]>;
 
   @ViewChild('searchInput', {static: true}) input: ElementRef;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,
+              private storeService: StoreService) {
   }
 
   ngOnInit() {
 
     this.courseId = this.route.snapshot.params['id'];
-    this.course$ = createHttpObservable(`/api/courses/${this.courseId}`)
-      .pipe(
-        debug(RxJsLoggingLevel.INFO, 'course value'),
-      );
-    this.lessons$ = this.loadLessons();
-    forkJoin(this.course$, this.lessons$).pipe(
-      // tap(([course, lessons]) => {
-      //   console.log('course', course);
-      //   console.log('lessons', lessons);
-      // })
-      debug(RxJsLoggingLevel.INFO, 'course and lessons value'),
-    );
+    this.course$ = this.storeService.selectCourseById(this.courseId);
 
-    setRxJsLoggingLevel(RxJsLoggingLevel.DEBUG);
+
+
+    // this.lessons$ = this.loadLessons();
+    // forkJoin(this.course$, this.lessons$).pipe(
+    //   // tap(([course, lessons]) => {
+    //   //   console.log('course', course);
+    //   //   console.log('lessons', lessons);
+    //   // })
+    //   debug(RxJsLoggingLevel.INFO, 'course and lessons value'),
+    // );
+
+    // setRxJsLoggingLevel(RxJsLoggingLevel.DEBUG);
   }
 
   ngAfterViewInit() {

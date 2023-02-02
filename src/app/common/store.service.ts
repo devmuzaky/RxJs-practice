@@ -60,4 +60,10 @@ export class StoreService {
       }
     }));
   }
+
+  selectCourseById(courseId: number) {
+    return this.courses$.pipe(
+      map(courses => courses.find(course => course.id == courseId))
+    );
+  }
 }
